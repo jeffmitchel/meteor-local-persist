@@ -14,7 +14,7 @@ Simple client-side observer class that provides persistence for Meteor Collectio
 LocalPersist(collection, key);
 ```
 
-Collection is the Meteor Collection to be persisted. Key is a string value that will be used to for the key to browser storage.
+Collection is the Meteor Collection to be persisted. Key is a string value used as the access key for browser storage.
 
 ### Methods:
 
@@ -39,9 +39,10 @@ if (Meteor.isClient) {
       return shoppingCart.find();
     });
 
-    // that's it. just use the collection normally and the observer will keep it sync'd
-    // to browser storage. the data will be stored back into the collection when returning
-    // to the app (depending, of course, on availability of localStorage in the browser).
+    // that's it. just use the collection normally and the observer
+    // will keep it sync'd to browser storage. the data will be stored
+    // back into the collection when returning to the app (depending,
+    // of course, on availability of localStorage in the browser).
 
     shoppingCart.insert({ item: 'Discover Meteor Book', quantity: 1 });
   });
@@ -78,3 +79,5 @@ if (Meteor.isClient) {
 ## Notes:
 
 This is a simple implementation that keeps an identical copy of the collection's data in browser storage. While not especially space efficient, it does preserve all of the Meteor.Collection reactive goodness.
+
+See http://amplifyjs.com/api/store/#storagetypes for information about how data is stored in the browser.

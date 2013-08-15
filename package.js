@@ -11,7 +11,7 @@ Package.on_use(function (api) {
 Package.on_test(function (api) {
   api.use('underscore', 'client');
   api.use('amplify', 'client');
-  api.use('local-persist', 'client');
   api.use('tinytest', 'client');
+  api.add_files('local-persist.js', 'client');
   api.add_files('local-persist-test.js', 'client');
 });

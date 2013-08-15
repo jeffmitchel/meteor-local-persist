@@ -1,6 +1,6 @@
 # Meteor Local Persist Package
 
-Simple client-side observer class that provides persistence for Meteor Collections using browser storage via Amplify.js.
+Simple client-side observer class that provides persistence for Meteor Collections using browser storage via Amplify.js. Collections are reactive across browser tabs.
 
 ## Installation:
 1. `npm install -g meteorite` (if not already installed)
@@ -44,7 +44,7 @@ if (Meteor.isClient) {
     // back into the collection when returning to the app (depending,
     // of course, on availability of localStorage in the browser).
 
-    shoppingCart.insert({ item: 'Discover Meteor Book', quantity: 1 });
+    shoppingCart.insert({ item: 'DMB-01', desc: Discover Meteor Book', quantity: 1 });
   });
 }
 ```
@@ -78,6 +78,8 @@ if (Meteor.isClient) {
 
 ## Notes:
 
-This is a simple implementation that keeps an identical copy of the collection's data in browser storage. While not especially space efficient, it does preserve all of the Meteor.Collection reactive goodness.
+- This is a simple implementation that keeps an identical copy of the collection's data in browser storage. While not especially space efficient, it does preserve all of the Meteor.Collection reactive goodness.
 
-See http://amplifyjs.com/api/store/#storagetypes for information about how data is stored in the browser.
+- The cross-tab reactvity implementation is naive and will resync all LocalPersist instances when a browser storage event is fired.
+
+- See http://amplifyjs.com/api/store/#storagetypes for information about how data is stored in the browser.

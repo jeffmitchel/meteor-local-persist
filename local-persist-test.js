@@ -10,7 +10,7 @@ var data = [
 
 Tinytest.add('Local Persist - Insert Data', function(test) {
   var testCollection = new Meteor.Collection(null);
-  var testObserver = new BrowserCollection(testCollection, 'Test-Collection');
+  var testObserver = new LocalPersist(testCollection, 'Test-Collection');
 
   data.forEach(function (doc) {
     testCollection.insert(doc);
@@ -26,7 +26,7 @@ Tinytest.add('Local Persist - Insert Data', function(test) {
 
 Tinytest.add('Local Persist - Retrieve Data', function(test) {
   var testCollection = new Meteor.Collection(null);
-  var testObserver = new BrowserCollection(testCollection, 'Test-Collection');
+  var testObserver = new LocalPersist(testCollection, 'Test-Collection');
 
   // right number of adds?
   test.equal(testObserver._getStats().added, data.length);
@@ -40,7 +40,7 @@ Tinytest.add('Local Persist - Retrieve Data', function(test) {
 
 Tinytest.add('Local Persist - Remove Data', function(test) {
   var testCollection = new Meteor.Collection(null);
-  var testObserver = new BrowserCollection(testCollection, 'Test-Collection');
+  var testObserver = new LocalPersist(testCollection, 'Test-Collection');
 
   // right number of adds?
   test.equal(testObserver._getStats().added, data.length);

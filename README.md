@@ -44,7 +44,7 @@ if (Meteor.isClient) {
     // back into the collection when returning to the app (depending,
     // of course, on availability of localStorage in the browser).
 
-    shoppingCart.insert({ item: 'DMB-01', desc: Discover Meteor Book', quantity: 1 });
+    shoppingCart.insert({ item: 'DMB-01', desc: 'Discover Meteor Book', quantity: 1 });
   });
 }
 ```

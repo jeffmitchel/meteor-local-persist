@@ -1,6 +1,3 @@
-// global list of all instanciated LocalPersists
-var persisters = [];
-
 LocalPersist = function (collection, key) {
   var self = this;
   if (! (self instanceof LocalPersist))
@@ -9,7 +6,6 @@ LocalPersist = function (collection, key) {
   self.key = 'browcol__' + key;
   self.col = collection;
   self.cur = self.col.find({});
-  self.handle = null;
   self.stats = { added: 0, removed: 0, changed: 0 };
 
   persisters.push(self);
@@ -41,8 +37,14 @@ LocalPersist = function (collection, key) {
       },
 
       removed: function (doc) {
-        // get tracking list and remove document
-        var list = _.without(amplify.store(self.key), doc._id);
+        var list = amplify.store(self.key);
+
+        // if not in list, nothing to do
+        if(! _.contains(list, doc._id))
+          return;
+
+        // remove from list
+        list = _.without(list, doc._id);
 
         // remove document copy from local storage
         amplify.store(self._makeDataKey(doc._id), null);
@@ -73,9 +75,10 @@ LocalPersist.prototype = {
   _makeDataKey: function (id) {
     return this.key + '__' + id;
   },
-  refresh: function (clean) {
+  refresh: function (init) {
     var self = this;
     var list = amplify.store(self.key);
+    var dels = [];
 
     self.stats.added = 0;
 
@@ -94,13 +97,26 @@ LocalPersist.prototype = {
         return !! doc;
       });
 
-      // save cleaned list (if changed)
-      if(clean && length != list.length)
+      // if not initializing, check for deletes
+      if(! init) {
+        self.col.find({}).forEach(function (doc) {
+          if(! _.contains(list, doc._id))
+            dels.push(doc._id);
+        });
+
+        _.each(dels, function (id) {
+          self.col.remove({ _id: id });
+        });
+      }
+
+      // if initializing, save cleaned list (if changed)
+      if(init && length != list.length)
         amplify.store(self.key, list.length === 0 ? null : list);
     }
   }
 };
 
+var persisters = [];
 var lpTimer = null;
 
 Meteor.startup(function () {

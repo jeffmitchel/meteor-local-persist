@@ -57,7 +57,7 @@ LocalPersist = function (collection, key) {
 
       changed: function (newDoc, oldDoc) {
         // update document in local storage
-        amplify.store(self._makeDataKey(doc._id), newDoc);
+        amplify.store(self._makeDataKey(newDoc._id), newDoc);
         ++self.stats.changed;
       }
     });

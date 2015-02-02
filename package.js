@@ -8,7 +8,7 @@ Package.describe({
 Package.onUse(function (api) {
   api.versionsFrom('METEOR@1.0');
   api.use('underscore', 'client');
-  api.use('nunohvidal:lz-string', 'client')
+  api.use('nunohvidal:lz-string@1.3.3', 'client')
   api.addFiles('local-persist.js', 'client');
   api.export('LocalPersist', 'client');
 });

@@ -1,8 +1,0 @@
-{
-  "name": "local-persist",
-  "description": "Meteor Browser Collection Package",
-  "homepage": "https://github.com/jeffmitchel/meteor-local-persist",
-  "author": "Jeff Mitchell  (http://3doto.com)",
-  "version": "0.2.3",
-  "git": "https://github.com/jeffmitchel/meteor-local-persist.git"
-}

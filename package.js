@@ -1,18 +1,20 @@
 Package.describe({
-  summary: 'Persistent Client-side Collections for Meteor'
+  name: "jeffm:local-persist",
+  summary: "Persistent client (browser) collections for Meteor, using localStorage.",
+  version: "1.0.0",
+  git: "https://github.com/jeffmitchel/meteor-local-persist.git"
 });
 
-Package.on_use(function (api) {
+Package.onUse(function (api) {
+  api.versionsFrom('METEOR@1.0');
   api.use('underscore', 'client');
-  api.use('amplify', 'client');
-  api.add_files('local-persist.js', 'client');
+  api.use('nunohvidal:lz-string', 'client')
+  api.addFiles('local-persist.js', 'client');
   api.export('LocalPersist', 'client');
 });
 
-Package.on_test(function (api) {
-  api.use('underscore', 'client');
-  api.use('amplify', 'client');
+Package.onTest(function (api) {
+  api.use('jeffm:local-persist', 'client');
   api.use('tinytest', 'client');
-  api.use('local-persist', 'client');
-  api.add_files('local-persist-test.js', 'client');
+  api.addFiles('local-persist-test.js', 'client');
 });

@@ -1,26 +1,51 @@
 # Meteor Local Persist Package
 
-Simple client-side observer class that provides persistence for Meteor Collections using browser storage via Amplify.js. Collections are reactive across browser tabs.
+Persistent client (browser) collections for Meteor, using localStorage.
+Collections are reactive across browser tabs.
 
 ## Installation:
-1. `npm install -g meteorite` (if not already installed)
-2. `mrt add local-persist`
+`meteor add jeffm:local-persist`
 
 ## Documentation:
 
 ### Constructor:
 
 ```
-LocalPersist(collection, key);
+LocalPersist(collection, key, options);
 ```
 
-Collection is the Meteor Collection to be persisted. Key is a string value used as the access key for browser storage.
+- Collection: Meteor Collection to be persisted.
+- Key: String value used as the access key for browser storage.
+- Options: Object, optional.
+
+**Options:**
+
+- compress: Compress data? Boolean, defaults to false.
+- migrate: Migrate data previously stored with pre-1.0, Amplify based, versions of this package? Boolean, defaults to false.
+- maxDocuments: Maximum number of documents to track. Number, defaults to 5000.
+- storageFull: Function called when maxDocuments is exceeded or browser local storage is full. Function is passed the collection being observed and the document that cause the execption. Default function does nothing. See example below.
 
 ### Methods:
 
 ```
   None.
 ```
+
+### Dependancies:
+
+- underscore
+- nunohvidal:lz-string
+
+## Notes:
+
+- A separate copy of the collection's data is kept in the browser's local storage. This is used to restore the Meteor collection when the page is reloaded or the vistor returns.
+
+- The cross-tab reactvity implementation is naive and will resync all LocalPersist instances when a browser storage event is fired.
+
+- It is safe to switch between compressed and uncompressed data. The compression status of each document is tracked and will be transitioned when the document is next saved to local storage.
+
+- If local storage is not supported by the browser, no persistance will be provided. This should not be an issue, as all browsers currently supported by Meteor support local storage.
+
 
 ## Example:
 
@@ -32,10 +57,17 @@ if (Meteor.isClient) {
     var shoppingCart = new Meteor.Collection(null);
 
     // create a local persistence observer
-    var shoppingCartObserver = new LocalPersist(shoppingCart, 'Shopping-Cart');
+    var shoppingCartObserver = new LocalPersist(shoppingCart, 'Shopping-Cart',
+      {                                     // options are optional!
+        maxDocuments: 99,                   // maximum number of line items in cart
+        storageFull: function (col, doc) {  // function to handle maximum being exceeded
+          col.remove({ _id: doc._id });
+          alert('Shopping cart is full.');
+        }
+      });
 
-    // create a handlebars helper to fetch the data
-    Handlebars.registerHelper("shoppingCartItems", function () {
+    // create a helper to fetch the data
+    UI.registerHelper("shoppingCartItems", function () {
       return shoppingCart.find();
     });
 
@@ -75,11 +107,3 @@ if (Meteor.isClient) {
   </table>
 </template>
 ```
-
-## Notes:
-
-- This is a simple implementation that keeps an identical copy of the collection's data in browser storage. While not especially space efficient, it does preserve all of the Meteor.Collection reactive goodness.
-
-- The cross-tab reactvity implementation is naive and will resync all LocalPersist instances when a browser storage event is fired.
-
-- See http://amplifyjs.com/api/store/#storagetypes for information about how data is stored in the browser.

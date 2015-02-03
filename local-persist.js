@@ -95,10 +95,10 @@ LocalPersist.prototype = {
   },
   _put: function (key, doc) {
     var rec = {};
-    rec.v = 1;
+    rec.v = 2;
     rec.c = this.compress ? 1 : 0;
     rec.d = EJSON.stringify(doc);
-    rec.d = this.compress ? LZString.compress(EJSON.stringify(doc)) : EJSON.stringify(doc);
+    rec.d = this.compress ? LZString.compressToUTF16(EJSON.stringify(doc)) : EJSON.stringify(doc);
     try {
       localStorage.setItem(key, EJSON.stringify(rec));
     } catch (e) {
@@ -112,7 +112,15 @@ LocalPersist.prototype = {
     if(val === null)
       return null;
     var rec = EJSON.parse(val);
-    return rec.c === 1 ? EJSON.parse(LZString.decompress(rec.d)) : EJSON.parse(rec.d);
+    if(rec.c === 1) {
+      if(rec.v === 1)
+        val = LZString.decompress(rec.d);
+      else
+        val = LZString.decompressFromUTF16(rec.d);
+    } else {
+      val = rec.d;
+    }
+    return EJSON.parse(val);
   },
   _remove: function (key) {
     localStorage.removeItem(key);

@@ -8,7 +8,7 @@ LocalPersist = function (collection, key, options) {
   self.col = collection;
   self.compress = !! (options && options.compress);
   self.migrate = !! (options && options.migrate);
-  self.maxDocuments = !! (options && options.maxDocuments && typeof options.maxDocuments === 'number') ? options.maxDocuments : 5000;
+  self.maxDocuments = !! (options && options.maxDocuments && typeof options.maxDocuments === 'number') ? options.maxDocuments : 0;
   self.storageFull = !! (options && options.storageFull && typeof options.storageFull === 'function') ? options.storageFull : function (document) {};
   self.cur = [];
 
@@ -24,7 +24,7 @@ LocalPersist = function (collection, key, options) {
 
       self.cur.observe({
         added: function (doc) {
-          if(self.stats.added - self.stats.removed >= self.maxDocuments) {
+          if(self.maxDocuments > 0 && self.stats.added - self.stats.removed >= self.maxDocuments) {
             self.storageFull(self.col, doc);
           }
 

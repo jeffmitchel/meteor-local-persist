@@ -22,7 +22,7 @@ LocalPersist(collection, key, options);
 
 - compress: Compress data? Boolean, defaults to false.
 - migrate: Migrate data previously stored with pre-1.0, Amplify based, versions of this package? Boolean, defaults to false.
-- maxDocuments: Maximum number of documents to track. Number, defaults to 5000.
+- maxDocuments: Maximum number of documents to track. Number, defaults to 0 (no limit).
 - storageFull: Function called when maxDocuments is exceeded or browser local storage is full. Function is passed the collection being observed and the document that cause the execption. Default function does nothing. See example below.
 
 ### Methods:

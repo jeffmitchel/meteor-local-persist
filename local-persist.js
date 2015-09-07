@@ -190,7 +190,7 @@ LocalPersist.prototype = {
   },
   _refresh: function (init) {
     var self = this;
-    
+
     if(!! init && self.migrate)
       self._migrate(self.key);
 
@@ -237,13 +237,18 @@ LocalPersist.prototype = {
 var persisters = [];
 var lpTimer = null;
 
+function storageHandler (e) {
+  Meteor.clearTimeout(lpTimer);
+  lpTimer = Meteor.setTimeout(function () {
+    _.each(persisters, function (lp) {
+      lp._refresh(false);
+    });
+  }, 250);
+}
+
 Meteor.startup(function () {
-  $(window).bind('storage', function (e) {
-    Meteor.clearTimeout(lpTimer);
-    lpTimer = Meteor.setTimeout(function () {
-      _.each(persisters, function (lp) {
-        lp._refresh(false);
-      });
-    }, 250);
-  });
+  if(window.addEventListener)
+  	window.addEventListener('storage', storageHandler, false);
+  else if(window.attachEvent)
+  	window.attachEvent('onstorage', storageHandler);
 });

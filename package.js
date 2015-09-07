@@ -1,7 +1,7 @@
 Package.describe({
   name: "jeffm:local-persist",
   summary: "Persistent client (browser) collections for Meteor, using localStorage.",
-  version: "1.1.0",
+  version: "1.2.0",
   git: "https://github.com/jeffmitchel/meteor-local-persist.git"
 });
 

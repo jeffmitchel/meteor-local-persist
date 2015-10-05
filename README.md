@@ -34,6 +34,7 @@ LocalPersist(collection, key, options);
 ### Dependancies:
 
 - underscore
+- ejson
 - nunohvidal:lz-string
 
 ## Notes:

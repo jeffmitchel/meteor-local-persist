@@ -1,3 +1,7 @@
+1.3.0 / 2015-10-05
+==================
+* Explicitly use EJSON package.
+
 1.2.0 / 2015-09-07
 ==================
 * Removed dependency on jQuery.
